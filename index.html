@@ -1,40 +1,517 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
 
-		<title>reveal.js</title>
+    <title>Event loop in JavaScript</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+    <meta
+      name="description"
+      content="A framework for easily creating beautiful presentations using HTML"
+    />
+    <meta name="author" content="Hakim El Hattab" />
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link
+      rel="stylesheet"
+      href="plugin/highlight/monokai.css"
+      id="highlight-theme"
+    />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h1>Event loop in JavaScript</h1>
+          <h3>Task of Rolling Scopes School</h3>
+          <p>
+            <small
+              >Created by
+              <a href="https://github.com/BertFrontEnd" target="_blank"
+                >BertFrontEnd</a
+              >
+              and
+              <a href="https://github.com/zhechka" target="_blank"
+                >Mentor</a
+              ></small
+            >
+          </p>
+        </section>
+
+        <section>
+          <p>
+            So, who tells the JS engine that he needs to execute some piece of
+            the program?
+          </p>
+        </section>
+
+        <section>
+          <p>
+            A common characteristic of all such environments is a built-in
+            mechanism called an
+            <a href="https://en.wikipedia.org/wiki/Event_loop" target="_blank"
+              >Event Loop</a
+            >
+          </p>
+        </section>
+
+        <section>
+          <section>
+            <h4>Take a look at the following diagram</h4>
+            <a href="#" class="navigate-down">
+              <img
+                class="r-frame"
+                style="background: rgba(255, 255, 255, 0.1);"
+                width="178"
+                height="238"
+                data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png"
+                alt="Down arrow"
+              />
+            </a>
+          </section>
+
+          <section>
+            <img width="70%" height="auto" src="./assets/main.png" alt="Main" />
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <img
+              width="30%"
+              height="auto"
+              src="./assets/js-engine.png"
+              alt="JS-engine"
+            />
+            <p>
+              Here we see the JS-engine. It has two main components:
+              <a
+                href="https://en.wikipedia.org/wiki/Heap_(data_structure)"
+                target="_blank"
+                >Heap</a
+              >
+              or
+              <a
+                href="https://en.wikipedia.org/wiki/Heap_(data_structure)"
+                target="_blank"
+                >Memory Heap</a
+              >
+              and
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+          </section>
+
+          <section>
+            <img
+              width="20%"
+              height="auto"
+              src="./assets/memory-heap.png"
+              alt="Memory Heap"
+            />
+            <p>
+              <a
+                href="https://en.wikipedia.org/wiki/Heap_(data_structure)"
+                target="_blank"
+                >Heap</a
+              >
+              or
+              <a
+                href="https://en.wikipedia.org/wiki/Heap_(data_structure)"
+                target="_blank"
+                >Memory Heap</a
+              >
+              - is where memory allocation takes place
+            </p>
+          </section>
+
+          <section>
+            <img
+              width="20%"
+              height="auto"
+              src="./assets/call-stack.png"
+              alt="Call Stack"
+            />
+            <p>
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+              - is where the so-called stack frames fall into the process of
+              executing the code
+            </p>
+          </section>
+
+          <section>
+            <img
+              width="30%"
+              height="auto"
+              src="./assets/web-apis.png"
+              alt="Web APIs"
+            />
+            <p>
+              What are the
+              <a href="https://en.wikipedia.org/wiki/Web_API" target="_blank"
+                >Web APIs</a
+              >?
+            </p>
+          </section>
+
+          <section>
+            <p>
+              These are flows to which we do not have direct access, we can only
+              perform calls to them. They are built into the browser, where
+              asynchronous actions are performed
+            </p>
+          </section>
+
+          <section>
+            <p>
+              So, what is the
+              <a href="https://en.wikipedia.org/wiki/Event_loop" target="_blank"
+                >Event Loop</a
+              >
+              itself? Let's take a look at the following down
+            </p>
+          </section>
+
+          <section>
+            <img
+              width="70%"
+              height="auto"
+              src="./assets/event-loop.png"
+              alt="Event Loop"
+            />
+            <p>
+              The
+              <a href="https://en.wikipedia.org/wiki/Event_loop" target="_blank"
+                >Event Loop</a
+              >
+              solves one main problem: it monitors the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+              and the
+              <a
+                href="https://www.google.com/search?sxsrf=ALeKk03lj48lxNkhd6KoP3lkrBhMVAZ1RQ%3A1590251045777&ei=JU7JXtf9LqiVlwSmw4S4Aw&q=Callback+Queue+in+javaScript&oq=Callback+Queue+in+javaScript&gs_lcp=CgZwc3ktYWIQAzIGCAAQBRAeOgQIABBHOgUIABDLAToICAAQBxAFEB5Q2I8FWIOVBWCetQVoAHADeACAAXGIAakCkgEDMi4xmAEAoAEBqgEHZ3dzLXdpeg&sclient=psy-ab&ved=0ahUKEwiXpL_lssrpAhWoyoUKHaYhATcQ4dUDCAw&uact=5"
+                target="_blank"
+                >Callback Queue</a
+              >
+            </p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h4>Consider the following example</h4>
+            <pre
+              data-id="code-animation"
+            ><code class="hljs" data-trim data-line-numbers>
+						console.log('Hi');
+
+						setTimeout(function cb1() {
+							console.log('cb1');
+						}, 5000);
+
+						console.log('Bye');
+					</code></pre>
+          </section>
+
+          <section>
+            <p>
+              Let's take a step-by-step “execution” of this code and see what
+              happens in the system
+            </p>
+          </section>
+
+          <section>
+            <p>
+              Nothing is happening yet - the browser console is clean, the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+              is empty
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-01.png"
+              alt="Event Loop 01"
+            />
+          </section>
+          <section>
+            <p>
+              The <em>console.log('Hi')</em> command is added to the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-02.png"
+              alt="Event Loop 02"
+            />
+          </section>
+          <section>
+            <p>The <em>console.log('Hi')</em> command is executed</p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-03.png"
+              alt="Event Loop 03"
+            />
+          </section>
+          <section>
+            <p>
+              The <em>console.log ('Hi')</em> command is removed from the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-04.png"
+              alt="Event Loop 04"
+            />
+          </section>
+          <section>
+            <p>
+              The <em>setTimeout (function cb1 () {...})</em> command is added
+              to the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-05.png"
+              alt="Event Loop 05"
+            />
+          </section>
+          <section>
+            <p>
+              The <em>setTimeout (function cb1 () {...})</em> command is
+              executed. The browser creates a timer that is part of the
+              <a href="https://en.wikipedia.org/wiki/Web_API" target="_blank"
+                >Web API</a
+              >. He will do the countdown
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-06.png"
+              alt="Event Loop 06"
+            />
+          </section>
+          <section>
+            <p>
+              The <em>setTimeout (function cb1 () {...})</em> command has
+              completed and is removed from the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-07.png"
+              alt="Event Loop 07"
+            />
+          </section>
+          <section>
+            <p>
+              The <em>console.log('Bye')</em> command is added to the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-08.png"
+              alt="Event Loop 08"
+            />
+          </section>
+          <section>
+            <p>The <em>console.log('Bye')</em> command is executed</p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-09.png"
+              alt="Event Loop 09"
+            />
+          </section>
+          <section>
+            <p>
+              The <em>console.log('Bye')</em> command is removed from the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-10.png"
+              alt="Event Loop 10"
+            />
+          </section>
+          <section>
+            <p>
+              After at least 5000 ms have passed, the timer exits and puts the
+              <em>cb1</em> callback in the
+              <a
+                href="https://www.google.com/search?sxsrf=ALeKk03lj48lxNkhd6KoP3lkrBhMVAZ1RQ%3A1590251045777&ei=JU7JXtf9LqiVlwSmw4S4Aw&q=Callback+Queue+in+javaScript&oq=Callback+Queue+in+javaScript&gs_lcp=CgZwc3ktYWIQAzIGCAAQBRAeOgQIABBHOgUIABDLAToICAAQBxAFEB5Q2I8FWIOVBWCetQVoAHADeACAAXGIAakCkgEDMi4xmAEAoAEBqgEHZ3dzLXdpeg&sclient=psy-ab&ved=0ahUKEwiXpL_lssrpAhWoyoUKHaYhATcQ4dUDCAw&uact=5"
+                target="_blank"
+                >Callback Queue</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-11.png"
+              alt="Event Loop 11"
+            />
+          </section>
+          <section>
+            <p>
+              The
+              <a href="https://en.wikipedia.org/wiki/Event_loop" target="_blank"
+                >Event Loop</a
+              >
+              takes c the <em>cb1</em> function from the
+              <a
+                href="https://www.google.com/search?sxsrf=ALeKk03lj48lxNkhd6KoP3lkrBhMVAZ1RQ%3A1590251045777&ei=JU7JXtf9LqiVlwSmw4S4Aw&q=Callback+Queue+in+javaScript&oq=Callback+Queue+in+javaScript&gs_lcp=CgZwc3ktYWIQAzIGCAAQBRAeOgQIABBHOgUIABDLAToICAAQBxAFEB5Q2I8FWIOVBWCetQVoAHADeACAAXGIAakCkgEDMi4xmAEAoAEBqgEHZ3dzLXdpeg&sclient=psy-ab&ved=0ahUKEwiXpL_lssrpAhWoyoUKHaYhATcQ4dUDCAw&uact=5"
+                target="_blank"
+                >Callback Queue</a
+              >
+              and places it on the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-12.png"
+              alt="Event Loop 12"
+            />
+          </section>
+          <section>
+            <p>
+              The <em>cb1</em> function is executed and adds
+              <em>console.log('cb1')</em> to the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-13.png"
+              alt="Event Loop 13"
+            />
+          </section>
+          <section>
+            <p>The <em>console.log('cb1')</em> command is executed</p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-14.png"
+              alt="Event Loop 14"
+            />
+          </section>
+          <section>
+            <p>
+              The <em>console.log('cb1')</em> command is removed from the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-15.png"
+              alt="Event Loop 15"
+            />
+          </section>
+          <section>
+            <p>
+              <em>Cb1</em> function is removed from the
+              <a href="https://en.wikipedia.org/wiki/Call_stack" target="_blank"
+                >Call Stack</a
+              >
+            </p>
+            <img
+              width="50%"
+              height="auto"
+              src="./assets/loop-16.png"
+              alt="Event Loop 16"
+            />
+          </section>
+        </section>
+
+        <section>
+          <p>
+            For consolidate knowledge - animated form of
+            <a href="https://en.wikipedia.org/wiki/Event_loop" target="_blank"
+              >Event Loop</a
+            >
+          </p>
+          <img
+            width="50%"
+            height="auto"
+            src="./assets/loop-full.gif"
+            alt="Event Full"
+          />
+        </section>
+
+        <section>
+          <h3>Thank you for your attention</h3>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/search/search.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // Also available as an ES module, see:
+      // https://revealjs.com/initialization/
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+        ],
+      });
+    </script>
+  </body>
 </html>
