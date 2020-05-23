@@ -14,7 +14,7 @@
 
 - ### Take a look at the following diagram
 
-- (main.png)
+- ### (main.png)
 
 - ### Here we see the JS-engine. He has two main components: Heap or Memory Heap and Call Stack
 
@@ -28,7 +28,7 @@
 
 - ### So, what is the event loop itself? Let's take a look at the following down
 
-- (event-loop.png)
+- ### (event-loop.png)
 
 - ### The Event Loop solves one main problem: it monitors the Call Stack and the Callback Queue.
 
@@ -38,7 +38,7 @@
 
 - ### Consider the following example
 
-- (code)
+- ### (code)
 
 - ### Let's take a step-by-step “execution” of this code and see what happens in the system
 
@@ -75,8 +75,6 @@
 - ### Cb1 function is removed from the Call Stack (loop-16.png)
 
 - ### For consolidate knowledge - animated form of Event Loop (loop-full.png)
-
-to consolidate knowledge Event Loop of the code in an animated form
 
 - It is interesting to note that the ES6 specification defines how the event loop should work, namely, it indicates that technically it is within the responsibility of the JS engine, which begins to play a more important role in the JS ecosystem. The main reason for this is because promises have appeared in ES6 and they need a reliable mechanism for scheduling operations in the Event Loop queue
 
