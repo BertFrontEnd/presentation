@@ -5,4 +5,4 @@ Task of Rolling Scopes School: [Presentation: Event loop in JavaScript](https://
 - A link to your YouTube video: none
 - A link to your Reveal presentation: [link](https://bertfrontend-presentation.netlify.app)
 - A link to the transcript of your presentation: [link](https://github.com/BertFrontEnd/presentation/blob/presentation/transcript.md)
-- Comments: none
+- Comments: I didn’t manage to voice the presentation, because I don’t have very good English, as well as the lack of the necessary equipment (only if I shot it on the phone and recorded sound on it) and there wasn’t quite enough time for editing and mixing the sound. Not to mention the preliminary rehearsal. Therefore, links only to the presentation and speech plan, without uploading the video with the speech to YouTube
