@@ -1,6 +1,6 @@
 # Task name: Presentation
 
-Task of Rolling Scopes School: [Presentation: Event loop in JavaScript](https://BertFrontEnd.github.io/presentation/index.html) -> Deadline: Saturday, May 24, 2020 23:59 -> 70%
+Task of Rolling Scopes School: [Presentation: Event loop in JavaScript](https://BertFrontEnd.github.io/presentation/index.html)
 
 - A link to your YouTube video: none
 - A link to your Reveal presentation: [link](https://BertFrontEnd.github.io/presentation/index.html)
